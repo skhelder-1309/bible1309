@@ -1,6 +1,6 @@
 /**
  * 솔라 그라티아 (Sola Gratia) - 정통 개혁주의 성경 주석 애플리케이션
- * Google AI Studio (Gemini 1.5 Pro) 연동 및 3-Layer 카드뉴스 시스템
+ * Google AI Studio (Gemini 1.5 Flash) 연동 및 3-Layer 카드뉴스 시스템
  */
 
 (function () {
@@ -144,6 +144,7 @@
     btnDeleteApiKey: document.getElementById('btnDeleteApiKey'),
     apiKeyInput: document.getElementById('apiKeyInput'),
     btnToggleKeyVisibility: document.getElementById('btnToggleKeyVisibility'),
+    modelSelect: document.getElementById('modelSelect'),
 
     // 성경 선택 & 필터
     testamentBtns: document.querySelectorAll('.testament-btn'),
@@ -201,6 +202,9 @@
     renderBookOptions('all');
     updateChapterLimits();
     checkApiKeyStatus();
+    if (el.modelSelect) {
+      el.modelSelect.value = getStoredModel();
+    }
     bindEvents();
   }
 
@@ -369,12 +373,22 @@
   }
 
   // ==========================================================================
-  // 8. API 키 관리 (로컬 스토리지)
+  // 8. API 키 및 모델 관리 (로컬 스토리지)
   // ==========================================================================
   const STORAGE_KEY = 'reformed_gemini_api_key';
+  const MODEL_STORAGE_KEY = 'reformed_gemini_selected_model';
+  const DEFAULT_MODEL = 'gemini-1.5-flash';
 
   function getStoredApiKey() {
     return localStorage.getItem(STORAGE_KEY) || '';
+  }
+
+  function getStoredModel() {
+    return localStorage.getItem(MODEL_STORAGE_KEY) || DEFAULT_MODEL;
+  }
+
+  function setStoredModel(model) {
+    localStorage.setItem(MODEL_STORAGE_KEY, model || DEFAULT_MODEL);
   }
 
   function checkApiKeyStatus() {
@@ -390,6 +404,9 @@
 
   function openApiKeyModal() {
     el.apiKeyInput.value = getStoredApiKey();
+    if (el.modelSelect) {
+      el.modelSelect.value = getStoredModel();
+    }
     el.apiKeyModal.classList.remove('hidden');
     el.apiKeyInput.focus();
   }
@@ -405,18 +422,26 @@
       return;
     }
     localStorage.setItem(STORAGE_KEY, key);
+    if (el.modelSelect) {
+      setStoredModel(el.modelSelect.value);
+    }
     checkApiKeyStatus();
     closeApiKeyModal();
-    showToast('Gemini API 키가 안전하게 저장되었습니다.');
+    const activeModel = getStoredModel();
+    showToast(`Gemini API 키 및 모델(${activeModel})이 저장되었습니다.`);
   }
 
   function handleDeleteApiKey() {
-    if (confirm('저장된 API 키를 삭제하시겠습니까?')) {
+    if (confirm('저장된 API 키와 설정을 삭제하시겠습니까?')) {
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(MODEL_STORAGE_KEY);
       el.apiKeyInput.value = '';
+      if (el.modelSelect) {
+        el.modelSelect.value = DEFAULT_MODEL;
+      }
       checkApiKeyStatus();
       closeApiKeyModal();
-      showToast('API 키가 삭제되었습니다.');
+      showToast('API 키 및 설정이 삭제되었습니다.');
     }
   }
 
@@ -431,7 +456,7 @@
   }
 
   // ==========================================================================
-  // 9. Gemini API 연동 (Fetch API & Gemini 1.5 Pro)
+  // 9. Gemini API 연동 (Fetch API & Gemini 1.5 Flash)
   // ==========================================================================
   function getSelectedDifficulty() {
     const selected = document.querySelector('input[name="difficulty"]:checked');
@@ -499,7 +524,9 @@ ${getDifficultyPromptContext(difficulty)}
 🚶‍♂️ [오늘의 삶 적용 & 기도 제목]`;
 
     try {
-      const response = await fetchGeminiCommentary(apiKey, REFORMED_SYSTEM_INSTRUCTION, userPrompt);
+      const activeModel = getStoredModel();
+      console.log(`[Gemini API] 주석 생성 요청 시작 - 모델: ${activeModel}`);
+      const response = await fetchGeminiCommentary(apiKey, REFORMED_SYSTEM_INSTRUCTION, userPrompt, activeModel);
       stopLoading();
       renderCommentaryResult(scriptureText, diffTitle, response);
     } catch (err) {
@@ -511,86 +538,72 @@ ${getDifficultyPromptContext(difficulty)}
 
   /**
    * Google Gemini API 호출 함수 (v1beta 엔드포인트)
-   * 기본 모델: gemini-1.5-flash (필요 시 gemini-1.5-pro로 자동 대체 시도)
+   * 고정 모델: gemini-1.5-flash
+   * 엔드포인트 형식: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={apiKey}
    */
   async function fetchGeminiCommentary(apiKey, systemInstruction, prompt, primaryModel = 'gemini-1.5-flash') {
-    // 1차 시도: 사용자가 요청한 기본 모델 (gemini-1.5-flash)
-    // 올바른 형식: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=...
-    const candidateModels = [primaryModel, primaryModel === 'gemini-1.5-flash' ? 'gemini-1.5-pro' : 'gemini-1.5-flash'];
-    let lastError = null;
+    // 항상 gemini-1.5-flash 모델 고정 사용
+    const model = 'gemini-1.5-flash';
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    console.log(`[Gemini API] 호출 엔드포인트: https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`);
 
-    for (const model of candidateModels) {
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
-
-      const requestBody = {
-        systemInstruction: {
+    const requestBody = {
+      contents: [
+        {
+          role: "user",
           parts: [
-            { text: systemInstruction }
+            { text: prompt }
           ]
-        },
-        contents: [
-          {
-            role: "user",
-            parts: [
-              { text: prompt }
-            ]
-          }
-        ],
-        generationConfig: {
-          temperature: 0.25,
-          topP: 0.95,
-          maxOutputTokens: 2500
         }
+      ],
+      generationConfig: {
+        temperature: 0.25,
+        topP: 0.95,
+        maxOutputTokens: 2500
+      }
+    };
+
+    if (systemInstruction) {
+      requestBody.systemInstruction = {
+        parts: [
+          { text: systemInstruction }
+        ]
       };
+    }
 
-      try {
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(requestBody)
-        });
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    });
 
-        if (!res.ok) {
-          const errorData = await res.json().catch(() => ({}));
-          const errorMsg = errorData.error?.message || `HTTP ${res.status} (${res.statusText})`;
-          
-          if (res.status === 400 && (errorMsg.includes('API_KEY_INVALID') || errorMsg.includes('API key not valid'))) {
-            throw new Error('입력하신 Google AI Studio API 키가 올바르지 않습니다. 키를 다시 확인해 주세요.');
-          } else if (res.status === 429) {
-            throw new Error('Google AI Studio의 무료 요청 한도(Quota)를 초과했습니다. 잠시 후 다시 시도해 주세요.');
-          } else if (res.status === 404 || errorMsg.includes('is not found for API version')) {
-            // 모델이 해당 API 버전에서 지원되지 않을 경우 다음 후보 모델로 폴백 시도
-            console.warn(`[Gemini API] 모델 ${model}을 찾을 수 없어 다음 모델로 재시도합니다: ${errorMsg}`);
-            lastError = new Error(`Gemini 모델(${model})을 찾을 수 없습니다: ${errorMsg}`);
-            continue;
-          } else {
-            throw new Error(`Gemini API 통신 실패 (${model}): ${errorMsg}`);
-          }
-        }
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      const errorMsg = errorData.error?.message || `HTTP ${res.status} (${res.statusText})`;
 
-        const data = await res.json();
-        const candidate = data.candidates?.[0];
-        if (!candidate || !candidate.content?.parts?.[0]?.text) {
-          throw new Error('AI 모델로부터 유효한 응답을 받지 못했습니다.');
-        }
-
-        return candidate.content.parts[0].text;
-      } catch (err) {
-        if (err.message.includes('찾을 수 없습니다')) {
-          lastError = err;
-          continue;
-        }
-        throw err;
+      if (res.status === 400 && (errorMsg.includes('API_KEY_INVALID') || errorMsg.includes('API key not valid'))) {
+        throw new Error('입력하신 Google AI Studio API 키가 올바르지 않습니다. 키를 다시 확인해 주세요.');
+      } else if (res.status === 429) {
+        throw new Error('Google AI Studio의 무료 요청 한도(Quota)를 초과했습니다. 잠시 후 다시 시도해 주세요.');
+      } else if (res.status === 404 || errorMsg.includes('is not found') || errorMsg.includes('not supported')) {
+        throw new Error(`Gemini 모델(${model}) 엔드포인트를 찾을 수 없습니다: ${errorMsg}`);
+      } else {
+        throw new Error(`Gemini API 통신 실패 (${model}): ${errorMsg}`);
       }
     }
 
-    // 모든 후보 모델 시도 실패 시 마지막 오류 throw
-    throw lastError || new Error('모든 Gemini 모델 엔드포인트 호출에 실패했습니다.');
+    const data = await res.json();
+    const candidate = data.candidates?.[0];
+    if (!candidate || !candidate.content?.parts?.[0]?.text) {
+      throw new Error('AI 모델로부터 유효한 응답을 받지 못했습니다.');
+    }
+
+    return candidate.content.parts[0].text;
   }
 
-  // 기존 함수명 호환성 유지
+  // 기존 함수명 호환성 유지 (gemini-1.5-flash 고정)
   async function fetchGemini15Pro(apiKey, systemInstruction, prompt) {
     return fetchGeminiCommentary(apiKey, systemInstruction, prompt, 'gemini-1.5-flash');
   }

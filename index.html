@@ -69,6 +69,16 @@
             <button id="btnToggleKeyVisibility" type="button" class="eye-btn" title="키 표시/숨기기">👁️</button>
           </div>
         </div>
+        <div class="input-field-group">
+          <label for="modelSelect">Gemini 모델 선택</label>
+          <select id="modelSelect" class="modal-select">
+            <option value="gemini-1.5-flash" selected>gemini-1.5-flash (기본 권장 - 고속 / 안정적)</option>
+            <option value="gemini-1.5-pro">gemini-1.5-pro (심화 신학 분석용)</option>
+          </select>
+          <p class="modal-hint">
+            API 엔드포인트 URL: <code>https://generativelanguage.googleapis.com/v1beta/models/[선택모델]:generateContent</code>
+          </p>
+        </div>
         <div class="guide-box">
           <span>💡 API 키가 없으신가요?</span>
           <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio에서
