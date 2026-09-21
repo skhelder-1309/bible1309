@@ -499,7 +499,7 @@ ${getDifficultyPromptContext(difficulty)}
 🚶‍♂️ [오늘의 삶 적용 & 기도 제목]`;
 
     try {
-      const response = await fetchGemini15Pro(apiKey, REFORMED_SYSTEM_INSTRUCTION, userPrompt);
+      const response = await fetchGeminiCommentary(apiKey, REFORMED_SYSTEM_INSTRUCTION, userPrompt);
       stopLoading();
       renderCommentaryResult(scriptureText, diffTitle, response);
     } catch (err) {
@@ -509,60 +509,90 @@ ${getDifficultyPromptContext(difficulty)}
     }
   }
 
-  async function fetchGemini15Pro(apiKey, systemInstruction, prompt) {
-    // 1차 시도: gemini-1.5-pro
-    // 실패 시 사용자 피드백을 위해 모델 엔드포인트 구성
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${encodeURIComponent(apiKey)}`;
+  /**
+   * Google Gemini API 호출 함수 (v1beta 엔드포인트)
+   * 기본 모델: gemini-1.5-flash (필요 시 gemini-1.5-pro로 자동 대체 시도)
+   */
+  async function fetchGeminiCommentary(apiKey, systemInstruction, prompt, primaryModel = 'gemini-1.5-flash') {
+    // 1차 시도: 사용자가 요청한 기본 모델 (gemini-1.5-flash)
+    // 올바른 형식: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=...
+    const candidateModels = [primaryModel, primaryModel === 'gemini-1.5-flash' ? 'gemini-1.5-pro' : 'gemini-1.5-flash'];
+    let lastError = null;
 
-    const requestBody = {
-      systemInstruction: {
-        parts: [
-          { text: systemInstruction }
-        ]
-      },
-      contents: [
-        {
-          role: "user",
+    for (const model of candidateModels) {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+
+      const requestBody = {
+        systemInstruction: {
           parts: [
-            { text: prompt }
+            { text: systemInstruction }
           ]
+        },
+        contents: [
+          {
+            role: "user",
+            parts: [
+              { text: prompt }
+            ]
+          }
+        ],
+        generationConfig: {
+          temperature: 0.25,
+          topP: 0.95,
+          maxOutputTokens: 2500
         }
-      ],
-      generationConfig: {
-        temperature: 0.25,
-        topP: 0.95,
-        maxOutputTokens: 2500
-      }
-    };
+      };
 
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestBody)
-    });
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
+        });
 
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      const errorMsg = errorData.error?.message || `HTTP ${res.status} (${res.statusText})`;
-      
-      if (res.status === 400 && errorMsg.includes('API_KEY_INVALID')) {
-        throw new Error('입력하신 Google AI Studio API 키가 올바르지 않습니다. 키를 다시 확인해 주세요.');
-      } else if (res.status === 429) {
-        throw new Error('Google AI Studio의 무료 요청 한도(Quota)를 초과했습니다. 잠시 후 다시 시도해 주세요.');
-      } else {
-        throw new Error(`Gemini API 통신 실패: ${errorMsg}`);
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}));
+          const errorMsg = errorData.error?.message || `HTTP ${res.status} (${res.statusText})`;
+          
+          if (res.status === 400 && (errorMsg.includes('API_KEY_INVALID') || errorMsg.includes('API key not valid'))) {
+            throw new Error('입력하신 Google AI Studio API 키가 올바르지 않습니다. 키를 다시 확인해 주세요.');
+          } else if (res.status === 429) {
+            throw new Error('Google AI Studio의 무료 요청 한도(Quota)를 초과했습니다. 잠시 후 다시 시도해 주세요.');
+          } else if (res.status === 404 || errorMsg.includes('is not found for API version')) {
+            // 모델이 해당 API 버전에서 지원되지 않을 경우 다음 후보 모델로 폴백 시도
+            console.warn(`[Gemini API] 모델 ${model}을 찾을 수 없어 다음 모델로 재시도합니다: ${errorMsg}`);
+            lastError = new Error(`Gemini 모델(${model})을 찾을 수 없습니다: ${errorMsg}`);
+            continue;
+          } else {
+            throw new Error(`Gemini API 통신 실패 (${model}): ${errorMsg}`);
+          }
+        }
+
+        const data = await res.json();
+        const candidate = data.candidates?.[0];
+        if (!candidate || !candidate.content?.parts?.[0]?.text) {
+          throw new Error('AI 모델로부터 유효한 응답을 받지 못했습니다.');
+        }
+
+        return candidate.content.parts[0].text;
+      } catch (err) {
+        if (err.message.includes('찾을 수 없습니다')) {
+          lastError = err;
+          continue;
+        }
+        throw err;
       }
     }
 
-    const data = await res.json();
-    const candidate = data.candidates?.[0];
-    if (!candidate || !candidate.content?.parts?.[0]?.text) {
-      throw new Error('AI 모델로부터 유효한 응답을 받지 못했습니다.');
-    }
+    // 모든 후보 모델 시도 실패 시 마지막 오류 throw
+    throw lastError || new Error('모든 Gemini 모델 엔드포인트 호출에 실패했습니다.');
+  }
 
-    return candidate.content.parts[0].text;
+  // 기존 함수명 호환성 유지
+  async function fetchGemini15Pro(apiKey, systemInstruction, prompt) {
+    return fetchGeminiCommentary(apiKey, systemInstruction, prompt, 'gemini-1.5-flash');
   }
 
   // ==========================================================================
