@@ -1,0 +1,1327 @@
+/* ==========================================================================
+   솔라 그라티아 (Sola Gratia) - 정통 개혁주의 성경 주석 디자인 시스템
+   Theme: Classic Reformed Deep Navy & Antique Gold / Warm Parchment
+   ========================================================================== */
+
+:root {
+  /* 메인 색상 토큰 (딥블루 / 앤틱 골드 / 웜 아이보리 우드) */
+  --bg-primary: #f6f3ed;
+  --bg-surface: #ffffff;
+  --bg-surface-subtle: #fcfbfa;
+  --bg-secondary: #eee9df;
+  
+  --navy-primary: #0d1b2a;
+  --navy-secondary: #1b2d45;
+  --navy-tertiary: #2e4465;
+  
+  --gold-primary: #b8860b;
+  --gold-light: #dfb15b;
+  --gold-dark: #8c6504;
+  --gold-tint: rgba(184, 134, 11, 0.12);
+  
+  --text-main: #24292f;
+  --text-muted: #57606a;
+  --text-light: #8c959f;
+  --text-inverse: #f0f6fc;
+  
+  --border-light: rgba(13, 27, 42, 0.08);
+  --border-medium: rgba(13, 27, 42, 0.16);
+  --border-gold: rgba(184, 134, 11, 0.28);
+  
+  /* 카드별 악센트 컬러 */
+  --card-summary-accent: #c2881a;
+  --card-summary-bg: #fffdf9;
+  --card-history-accent: #1e3a5f;
+  --card-history-bg: #f9fbfe;
+  --card-exegesis-accent: #2c6e49;
+  --card-exegesis-bg: #f7faf8;
+  --card-app-accent: #8b3a3a;
+  --card-app-bg: #fffafa;
+
+  /* 시스템 타이포그래피 */
+  --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Nanum Myeongjo', 'Noto Serif KR', Georgia, serif;
+  --font-emblem: 'Cinzel', serif;
+
+  /* 인터랙션 & 레이아웃 */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+  
+  --shadow-sm: 0 2px 6px rgba(13, 27, 42, 0.04);
+  --shadow-md: 0 8px 20px rgba(13, 27, 42, 0.07);
+  --shadow-lg: 0 16px 36px rgba(13, 27, 42, 0.12);
+  --shadow-gold: 0 6px 20px rgba(184, 134, 11, 0.25);
+  
+  --content-font-size: 16px;
+  --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 다크모드 선호 시 은은한 가독성 테마 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #0a111a;
+    --bg-surface: #121e2d;
+    --bg-surface-subtle: #182638;
+    --bg-secondary: #1a2a3e;
+    
+    --text-main: #e6edf3;
+    --text-muted: #9fb1c5;
+    --text-light: #6a7c93;
+    
+    --border-light: rgba(255, 255, 255, 0.08);
+    --border-medium: rgba(255, 255, 255, 0.15);
+    --border-gold: rgba(223, 177, 91, 0.35);
+    
+    --card-summary-bg: #162436;
+    --card-history-bg: #142233;
+    --card-exegesis-bg: #142823;
+    --card-app-bg: #291a20;
+    
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+}
+
+/* 기본 리셋 */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  line-height: 1.68;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 유틸리티 */
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   헤더 네비게이션
+   ========================================================================== */
+.app-header {
+  background: linear-gradient(135deg, var(--navy-primary) 0%, #15253b 100%);
+  color: var(--text-inverse);
+  padding: 1rem 1.25rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.header-container {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-emblem {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-gold);
+  flex-shrink: 0;
+}
+
+.cross-icon {
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.sub-latin {
+  font-family: var(--font-emblem);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  color: var(--gold-light);
+  font-weight: 700;
+}
+
+.brand-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.header-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--gold-light);
+  transform: translateY(-1px);
+}
+
+.header-btn.secondary {
+  background: linear-gradient(135deg, rgba(223, 177, 91, 0.2), rgba(184, 134, 11, 0.35));
+  border-color: var(--gold-light);
+  color: #ffe6a7;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ff5252;
+  box-shadow: 0 0 6px #ff5252;
+  display: inline-block;
+}
+
+.status-dot.active {
+  background-color: #00e676;
+  box-shadow: 0 0 8px #00e676;
+}
+
+/* ==========================================================================
+   모달 (API 키 설정)
+   ========================================================================== */
+.api-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(9, 18, 30, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.api-modal-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-lg);
+  max-width: 520px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: slideUpModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpModal {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+  background-color: var(--bg-surface-subtle);
+}
+
+.modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.modal-title-wrap h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  transition: var(--transition-smooth);
+}
+
+.close-btn:hover {
+  background: var(--border-light);
+  color: var(--text-main);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modal-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.modal-desc strong {
+  color: var(--text-main);
+}
+
+.input-field-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.45rem;
+  color: var(--text-main);
+}
+
+.input-with-action {
+  display: flex;
+  position: relative;
+}
+
+.input-with-action input {
+  width: 100%;
+  padding: 0.75rem 3rem 0.75rem 0.95rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-medium);
+  font-size: 0.95rem;
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  transition: var(--transition-smooth);
+}
+
+.input-with-action input:focus {
+  outline: none;
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 0 3px var(--gold-tint);
+}
+
+.eye-btn {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  font-size: 1.05rem;
+  opacity: 0.7;
+}
+
+.eye-btn:hover {
+  opacity: 1;
+}
+
+.guide-box {
+  background-color: var(--gold-tint);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  font-size: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.guide-box a {
+  color: var(--gold-dark);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.guide-box a:hover {
+  text-decoration: underline;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-surface-subtle);
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* ==========================================================================
+   버튼 시스템
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: var(--transition-smooth);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--navy-secondary) 0%, var(--navy-primary) 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 14px rgba(13, 27, 42, 0.25);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--navy-tertiary) 0%, var(--navy-secondary) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(13, 27, 42, 0.35);
+}
+
+.btn-cta {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #1b3557 0%, #0d1b2a 100%);
+  border: 1px solid var(--gold-light);
+  box-shadow: 0 6px 24px rgba(13, 27, 42, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-cta:hover {
+  background: linear-gradient(135deg, #244673 0%, #15253b 100%);
+  border-color: #ffd074;
+  box-shadow: 0 8px 30px rgba(13, 27, 42, 0.35);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--border-medium);
+  color: var(--text-main);
+  padding: 0.45rem 0.85rem;
+  font-size: 0.85rem;
+}
+
+.btn-outline:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--text-main);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.btn-ghost:hover {
+  background-color: var(--border-light);
+  color: var(--text-main);
+}
+
+.btn-outline-danger {
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #ef4444;
+}
+
+.btn-outline-danger:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* ==========================================================================
+   메인 레이아웃 & 신학 배너
+   ========================================================================== */
+.main-container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.card {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  transition: var(--transition-smooth);
+}
+
+.theological-banner {
+  background: linear-gradient(135deg, #fffdf8 0%, #fbf6ec 100%);
+  border: 1px solid var(--border-gold);
+  border-left: 5px solid var(--gold-primary);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+@media (prefers-color-scheme: dark) {
+  .theological-banner {
+    background: linear-gradient(135deg, #131f2d 0%, #172435 100%);
+  }
+}
+
+.scripture-quote {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: var(--text-main);
+  line-height: 1.6;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.verse-reference {
+  font-size: 0.85rem;
+  color: var(--gold-dark);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   컨트롤 패널 (성경 선택 & 난이도)
+   ========================================================================== */
+.panel-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.badge-number {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--navy-secondary);
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panel-section-title h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* 성경 구약/신약 탭 */
+.testament-tabs {
+  display: flex;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 0.3rem;
+  gap: 0.3rem;
+  margin-bottom: 1.25rem;
+}
+
+.testament-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0.55rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.testament-btn.active {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 성경 권/장/절 그리드 */
+.scripture-form-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.3fr 1.3fr;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .scripture-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.4rem;
+}
+
+.form-control {
+  width: 100%;
+  height: 48px;
+  padding: 0.6rem 0.85rem;
+  font-size: 1rem;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  transition: var(--transition-smooth);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 0 3px var(--gold-tint);
+}
+
+.select-control {
+  cursor: pointer;
+}
+
+.number-stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  height: 48px;
+  background-color: var(--bg-surface);
+}
+
+.stepper-btn {
+  width: 44px;
+  height: 100%;
+  border: none;
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
+  font-size: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+  user-select: none;
+}
+
+.stepper-btn:hover {
+  background-color: var(--border-medium);
+}
+
+.stepper-input {
+  border: none !important;
+  text-align: center;
+  font-weight: 700;
+  height: 100%;
+  padding: 0;
+  -moz-appearance: textfield;
+}
+
+.stepper-input::-webkit-outer-spin-button,
+.stepper-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-subhint {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+}
+
+/* 추천 묵상 칩스 */
+.quick-preset-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.quick-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding-top: 0.35rem;
+}
+
+.preset-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-pill);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.chip:hover {
+  background-color: var(--gold-tint);
+  border-color: var(--gold-light);
+  color: var(--gold-dark);
+}
+
+/* ==========================================================================
+   주석 난이도 선택 (3-Layer Cards)
+   ========================================================================== */
+.difficulty-section {
+  border-top: 1px solid var(--border-light);
+  padding-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.difficulty-guide-text {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.difficulty-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .difficulty-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.difficulty-card {
+  position: relative;
+  cursor: pointer;
+  display: block;
+}
+
+.difficulty-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.diff-card-inner {
+  border: 2px solid var(--border-light);
+  background-color: var(--bg-surface-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: var(--transition-smooth);
+}
+
+.diff-icon-wrap {
+  font-size: 1.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.diff-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+}
+
+.diff-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.diff-sub {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-light);
+}
+
+.diff-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.diff-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background-color: var(--border-light);
+  color: var(--text-muted);
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-pill);
+  align-self: flex-start;
+}
+
+/* 활성화 상태 */
+.difficulty-card input[type="radio"]:checked + .diff-card-inner {
+  border-color: var(--gold-primary);
+  background-color: var(--bg-surface);
+  box-shadow: 0 6px 20px rgba(184, 134, 11, 0.15);
+  transform: translateY(-3px);
+}
+
+.difficulty-card input[type="radio"]:checked + .diff-card-inner .diff-title {
+  color: var(--gold-dark);
+}
+
+.difficulty-card input[type="radio"]:checked + .diff-card-inner .diff-badge.highlight {
+  background-color: var(--gold-primary);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   로딩 상태
+   ========================================================================== */
+.loading-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-surface-subtle) 100%);
+  animation: fadeIn 0.3s ease;
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.reformed-loader {
+  width: 52px;
+  height: 52px;
+  border: 4px solid var(--border-light);
+  border-top-color: var(--gold-primary);
+  border-right-color: var(--navy-secondary);
+  border-radius: 50%;
+  animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  margin-bottom: 1.25rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.loading-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.theologian-quote-box {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+  background-color: var(--gold-tint);
+  border: 1px dashed var(--border-gold);
+  border-radius: var(--radius-md);
+  position: relative;
+}
+
+.quote-symbol {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  color: var(--gold-light);
+  line-height: 1;
+  position: absolute;
+  top: 0.2rem;
+  left: 0.8rem;
+  opacity: 0.6;
+}
+
+.theologian-quote {
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  font-style: italic;
+  color: var(--text-main);
+  margin-bottom: 0.4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.theologian-author {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gold-dark);
+}
+
+/* 에러 박스 */
+.error-notification {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background-color: #fef2f2;
+  border: 1px solid #f87171;
+  border-left: 5px solid #ef4444;
+  color: #991b1b;
+  padding: 1.25rem;
+}
+
+.error-icon {
+  font-size: 1.5rem;
+}
+
+.error-content h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.error-content p {
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.btn-icon-dismiss {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: #991b1b;
+}
+
+/* ==========================================================================
+   주석 결과 뷰 (카드뉴스 디자인)
+   ========================================================================== */
+.result-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: slideUpFade 0.4s ease-out;
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 결과 헤더 툴바 */
+.result-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.result-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.scripture-badge {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--navy-primary);
+  background: var(--gold-tint);
+  border: 1px solid var(--border-gold);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-pill);
+}
+
+@media (prefers-color-scheme: dark) {
+  .scripture-badge {
+    color: #ffd27d;
+  }
+}
+
+.difficulty-pill {
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: var(--navy-secondary);
+  color: #ffffff;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+}
+
+.time-stamp {
+  font-size: 0.78rem;
+  color: var(--text-light);
+}
+
+.result-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.font-size-adjuster {
+  display: flex;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.font-btn {
+  background: transparent;
+  border: none;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.font-btn:hover {
+  background-color: var(--border-light);
+}
+
+.font-btn.reset {
+  border-left: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* 카드뉴스 그리드 */
+.card-news-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.news-card {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.news-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-medium);
+}
+
+/* 개별 카드 테마 포인트 */
+.news-card.card-summary {
+  border-top: 5px solid var(--card-summary-accent);
+  background: linear-gradient(180deg, var(--card-summary-bg) 0%, var(--bg-surface) 100%);
+}
+
+.news-card.card-history {
+  border-top: 5px solid var(--card-history-accent);
+  background: linear-gradient(180deg, var(--card-history-bg) 0%, var(--bg-surface) 100%);
+}
+
+.news-card.card-exegesis {
+  border-top: 5px solid var(--card-exegesis-accent);
+  background: linear-gradient(180deg, var(--card-exegesis-bg) 0%, var(--bg-surface) 100%);
+}
+
+.news-card.card-application {
+  border-top: 5px solid var(--card-app-accent);
+  background: linear-gradient(180deg, var(--card-app-bg) 0%, var(--bg-surface) 100%);
+}
+
+.news-card .card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem 0.85rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.card-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.card-emoji {
+  font-size: 1.4rem;
+}
+
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.card-summary .card-title { color: var(--card-summary-accent); }
+.card-history .card-title { color: var(--card-history-accent); }
+.card-exegesis .card-title { color: var(--card-exegesis-accent); }
+.card-application .card-title { color: var(--card-app-accent); }
+
+@media (prefers-color-scheme: dark) {
+  .card-summary .card-title { color: #f4c462; }
+  .card-history .card-title { color: #6db0f7; }
+  .card-exegesis .card-title { color: #7ee0a4; }
+  .card-application .card-title { color: #f28c8c; }
+}
+
+.btn-copy-card {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-pill);
+  padding: 0.25rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-copy-card:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-dark);
+  background-color: var(--gold-tint);
+}
+
+/* 주석 본문 마크다운 렌더링 스타일 */
+.news-card .card-body {
+  padding: 1.5rem;
+  font-size: var(--content-font-size);
+  line-height: 1.85;
+  color: var(--text-main);
+}
+
+.markdown-body p {
+  margin-bottom: 1rem;
+}
+
+.markdown-body p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body strong {
+  font-weight: 700;
+  color: var(--text-main);
+  background: rgba(184, 134, 11, 0.1);
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+}
+
+.markdown-body ul, .markdown-body ol {
+  margin: 0.75rem 0 1rem 1.4rem;
+}
+
+.markdown-body li {
+  margin-bottom: 0.5rem;
+}
+
+.markdown-body blockquote {
+  border-left: 4px solid var(--gold-primary);
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: var(--text-muted);
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+/* 소그룹 가이드 배너 */
+.group-guide-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, var(--bg-surface-subtle) 0%, var(--bg-secondary) 100%);
+  border: 1px solid var(--border-medium);
+  padding: 1.25rem 1.5rem;
+}
+
+.guide-icon {
+  font-size: 1.8rem;
+}
+
+.guide-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.guide-text strong {
+  color: var(--text-main);
+}
+
+/* ==========================================================================
+   토스트 팝업
+   ========================================================================== */
+.toast-popup {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(13, 27, 42, 0.92);
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.92rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  z-index: 2000;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  animation: toastPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes toastPop {
+  from { opacity: 0; transform: translate(-50%, 15px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ==========================================================================
+   푸터
+   ========================================================================== */
+.app-footer {
+  background-color: var(--navy-primary);
+  color: var(--text-inverse);
+  padding: 2.5rem 1.25rem;
+  text-align: center;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.footer-motto {
+  font-family: var(--font-emblem);
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  color: var(--gold-light);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.footer-sub {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   인쇄 (Print) 미디어 쿼리 - 소그룹 인쇄물 최적화
+   ========================================================================== */
+@media print {
+  .app-header,
+  .theological-banner,
+  .control-panel,
+  .result-actions,
+  .btn-copy-card,
+  .group-guide-banner,
+  .app-footer,
+  .api-modal-overlay,
+  .toast-popup {
+    display: none !important;
+  }
+
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 12pt;
+  }
+
+  .main-container {
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .result-section {
+    display: block !important;
+  }
+
+  .result-header-bar {
+    border: none;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #333;
+  }
+
+  .news-card {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    margin-bottom: 1.5rem;
+    page-break-inside: avoid;
+  }
+}
