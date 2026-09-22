@@ -377,7 +377,7 @@
   // ==========================================================================
   const STORAGE_KEY = 'reformed_gemini_api_key';
   const MODEL_STORAGE_KEY = 'reformed_gemini_selected_model';
-  const DEFAULT_MODEL = 'gemini-1.5-flash';
+  const DEFAULT_MODEL = 'gemini-2.5-flash';
 
   function getStoredApiKey() {
     return localStorage.getItem(STORAGE_KEY) || '';
@@ -538,12 +538,12 @@ ${getDifficultyPromptContext(difficulty)}
 
   /**
    * Google Gemini API 호출 함수 (v1beta 엔드포인트)
-   * 고정 모델: gemini-1.5-flash
-   * 엔드포인트 형식: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={apiKey}
+   * 고정 모델: gemini-2.5-flash
+   * 엔드포인트 형식: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={apiKey}
    */
-  async function fetchGeminiCommentary(apiKey, systemInstruction, prompt, primaryModel = 'gemini-1.5-flash') {
-    // 항상 gemini-1.5-flash 모델 고정 사용
-    const model = 'gemini-1.5-flash';
+  async function fetchGeminiCommentary(apiKey, systemInstruction, prompt, primaryModel = 'gemini-2.5-flash') {
+    // 항상 gemini-2.5-flash 모델 고정 사용
+    const model = 'gemini-2.5-flash';
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
     console.log(`[Gemini API] 호출 엔드포인트: https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`);
 
@@ -603,9 +603,9 @@ ${getDifficultyPromptContext(difficulty)}
     return candidate.content.parts[0].text;
   }
 
-  // 기존 함수명 호환성 유지 (gemini-1.5-flash 고정)
+  // 기존 함수명 호환성 유지 (gemini-2.5-flash 고정)
   async function fetchGemini15Pro(apiKey, systemInstruction, prompt) {
-    return fetchGeminiCommentary(apiKey, systemInstruction, prompt, 'gemini-1.5-flash');
+    return fetchGeminiCommentary(apiKey, systemInstruction, prompt, 'gemini-2.5-flash');
   }
 
   // ==========================================================================

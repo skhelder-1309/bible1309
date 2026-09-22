@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>솔라 그라티아 | 정통 개혁주의 성경 주석 (Sola Gratia)</title>
-  <meta name="description" content="개인 묵상 및 소그룹 성경공부를 위한 정통 개혁주의 3-Layer 성경 주석 웹 애플리케이션">
+  <title>?�라 그라?�아 | ?�통 개혁주의 ?�경 주석 (Sola Gratia)</title>
+  <meta name="description" content="개인 묵상 �??�그�??�경공�?�??�한 ?�통 개혁주의 3-Layer ?�경 주석 ???�플리�??�션">
   <meta name="theme-color" content="#0f1a2c">
 
   <!-- Google Fonts: Noto Serif KR, Outfit, Nanum Myeongjo -->
@@ -20,342 +20,341 @@
 
 <body>
 
-  <!-- 최상단 헤더 네비게이션 -->
+  <!-- 최상???�더 ?�비게이??-->
   <header class="app-header">
     <div class="header-container">
       <div class="brand">
         <div class="brand-emblem">
-          <span class="cross-icon">✝</span>
+          <span class="cross-icon">??/span>
         </div>
         <div class="brand-text">
-          <span class="sub-latin">SOLA SCRIPTURA • SOLA GRATIA</span>
-          <h1 class="brand-title">개혁주의 성경 주석</h1>
+          <span class="sub-latin">SOLA SCRIPTURA ??SOLA GRATIA</span>
+          <h1 class="brand-title">개혁주의 ?�경 주석</h1>
         </div>
       </div>
       <div class="header-actions">
-        <button id="btnToggleApiKey" class="header-btn" title="Gemini API 키 설정">
-          <span class="icon">🔑</span>
-          <span class="btn-text">API 키 설정</span>
+        <button id="btnToggleApiKey" class="header-btn" title="Gemini API ???�정">
+          <span class="icon">?��</span>
+          <span class="btn-text">API ???�정</span>
           <span id="apiKeyBadge" class="status-dot"></span>
         </button>
-        <button id="btnDemoQuick" class="header-btn secondary" title="체험 모드로 바로보기">
-          <span class="icon">✨</span>
+        <button id="btnDemoQuick" class="header-btn secondary" title="체험 모드�?바로보기">
+          <span class="icon">??/span>
           <span class="btn-text">체험 모드</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- API 키 설정 모달 / 슬라이드 바 -->
+  <!-- API ???�정 모달 / ?�라?�드 �?-->
   <section id="apiKeyModal" class="api-modal-overlay hidden" aria-modal="true" role="dialog">
     <div class="api-modal-card">
       <div class="modal-header">
         <div class="modal-title-wrap">
-          <span class="key-icon">🔐</span>
-          <h3>Google AI Studio API Key 설정</h3>
+          <span class="key-icon">?��</span>
+          <h3>Google AI Studio API Key ?�정</h3>
         </div>
-        <button id="btnCloseApiKeyModal" class="close-btn" aria-label="닫기">×</button>
+        <button id="btnCloseApiKeyModal" class="close-btn" aria-label="?�기">×</button>
       </div>
       <div class="modal-body">
         <p class="modal-desc">
-          본 웹앱은 <strong>Gemini 1.5 Flash</strong> (또는 1.5 Pro)를 사용하여 성경 본문을 신학적으로 해설합니다.
-          입력하신 API 키는 서버로 전송되지 않고 브라우저 <code>localStorage</code>에만 안전하게 보관됩니다.
+          �??�앱?� <strong>Gemini 1.5 Flash</strong> �??�용?�여 ?�경 본문???�학?�으�??�설?�니??
+          ?�력?�신 API ?�는 ?�버�??�송?��? ?�고 브라?��? <code>localStorage</code>?�만 ?�전?�게 보�??�니??
         </p>
         <div class="input-field-group">
           <label for="apiKeyInput">Google AI Studio API Key</label>
           <div class="input-with-action">
-            <input type="password" id="apiKeyInput" placeholder="AIzaSy... 형식의 API 키를 입력하세요" autocomplete="off"
+            <input type="password" id="apiKeyInput" placeholder="AIzaSy... ?�식??API ?��? ?�력?�세?? autocomplete="off"
               spellcheck="false">
-            <button id="btnToggleKeyVisibility" type="button" class="eye-btn" title="키 표시/숨기기">👁️</button>
+            <button id="btnToggleKeyVisibility" type="button" class="eye-btn" title="???�시/?�기�?>?���?/button>
           </div>
         </div>
         <div class="input-field-group">
-          <label for="modelSelect">Gemini 모델 선택</label>
+          <label for="modelSelect">Gemini 모델 ?�택</label>
           <select id="modelSelect" class="modal-select">
-            <option value="gemini-1.5-flash" selected>gemini-1.5-flash (기본 권장 - 고속 / 안정적)</option>
-            <option value="gemini-1.5-pro">gemini-1.5-pro (심화 신학 분석용)</option>
+            <option value="gemini-2.5-flash" selected>gemini-2.5-flash (기본 권장 - 고속 / ?�정??</option>
           </select>
           <p class="modal-hint">
-            API 엔드포인트 URL: <code>https://generativelanguage.googleapis.com/v1beta/models/[선택모델]:generateContent</code>
+            API ?�드?�인??URL: <code>https://generativelanguage.googleapis.com/v1beta/models/[?�택모델]:generateContent</code>
           </p>
         </div>
         <div class="guide-box">
-          <span>💡 API 키가 없으신가요?</span>
-          <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio에서
-            무료 발급받기 ↗</a>
+          <span>?�� API ?��? ?�으?��???</span>
+          <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio?�서
+            무료 발급받기 ??/a>
         </div>
       </div>
       <div class="modal-footer">
-        <button id="btnDeleteApiKey" class="btn btn-outline-danger">키 삭제</button>
+        <button id="btnDeleteApiKey" class="btn btn-outline-danger">????��</button>
         <div class="footer-right">
           <button id="btnCancelApiKey" class="btn btn-ghost">취소</button>
-          <button id="btnSaveApiKey" class="btn btn-primary">저장하고 닫기</button>
+          <button id="btnSaveApiKey" class="btn btn-primary">?�?�하�??�기</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 메인 콘텐츠 영역 -->
+  <!-- 메인 콘텐�??�역 -->
   <main class="main-container">
 
-    <!-- 신학적 선언 배너 (카드 스타일) -->
+    <!-- ?�학???�언 배너 (카드 ?��??? -->
     <section class="theological-banner">
       <div class="banner-content">
-        <p class="scripture-quote">“모든 성경은 하나님의 감동으로 된 것으로 교훈과 책망과 바르게 함과 의로 교육하기에 유익하니”</p>
-        <span class="verse-reference">— 디모데후서 3장 16절</span>
+        <p class="scripture-quote">?�모???�경?� ?�나?�의 감동?�로 ??것으�?교훈�?책망�?바르�??�과 ?�로 교육?�기???�익?�니??/p>
+        <span class="verse-reference">???�모?�후??3??16??/span>
       </div>
     </section>
 
-    <!-- 검색 & 옵션 컨트롤 패널 -->
+    <!-- 검??& ?�션 컨트�??�널 -->
     <section class="control-panel card">
       <div class="panel-section-title">
         <span class="badge-number">1</span>
-        <h2>성경 본문 선택</h2>
+        <h2>?�경 본문 ?�택</h2>
       </div>
 
-      <!-- 구약 / 신약 빠른 필터 탭 -->
+      <!-- 구약 / ?�약 빠른 ?�터 ??-->
       <div class="testament-tabs" role="tablist">
-        <button class="testament-btn active" data-testament="all">전체 66권</button>
-        <button class="testament-btn" data-testament="OT">구약 (39권)</button>
-        <button class="testament-btn" data-testament="NT">신약 (27권)</button>
+        <button class="testament-btn active" data-testament="all">?�체 66�?/button>
+        <button class="testament-btn" data-testament="OT">구약 (39�?</button>
+        <button class="testament-btn" data-testament="NT">?�약 (27�?</button>
       </div>
 
-      <!-- 성경 권, 장, 절 선택 폼 -->
+      <!-- ?�경 �? ?? ???�택 ??-->
       <div class="scripture-form-grid">
         <div class="form-group book-select-group">
-          <label for="bookSelect">성경 책 (권)</label>
+          <label for="bookSelect">?�경 �?(�?</label>
           <div class="custom-select-wrap">
             <select id="bookSelect" class="form-control select-control">
-              <!-- JS에서 동적 주입 -->
+              <!-- JS?�서 ?�적 주입 -->
             </select>
           </div>
         </div>
 
         <div class="form-group chapter-group">
-          <label for="chapterInput">장 (Chapter)</label>
+          <label for="chapterInput">??(Chapter)</label>
           <div class="number-stepper">
-            <button type="button" class="stepper-btn minus" id="btnChapterPrev" title="이전 장">−</button>
+            <button type="button" class="stepper-btn minus" id="btnChapterPrev" title="?�전 ??>??/button>
             <input type="number" id="chapterInput" class="form-control stepper-input" value="1" min="1" max="50">
-            <button type="button" class="stepper-btn plus" id="btnChapterNext" title="다음 장">+</button>
+            <button type="button" class="stepper-btn plus" id="btnChapterNext" title="?�음 ??>+</button>
           </div>
-          <span id="maxChapterHint" class="input-subhint">최대 50장</span>
+          <span id="maxChapterHint" class="input-subhint">최�? 50??/span>
         </div>
 
         <div class="form-group verse-group">
-          <label for="verseInput">절 (Verse / 범위)</label>
+          <label for="verseInput">??(Verse / 범위)</label>
           <div class="verse-input-wrap">
-            <input type="text" id="verseInput" class="form-control" placeholder="예: 1 또는 1-5, 전체" value="1">
+            <input type="text" id="verseInput" class="form-control" placeholder="?? 1 ?�는 1-5, ?�체" value="1">
           </div>
-          <span class="input-subhint">단일 절(1) 또는 범위(1-14) 입력</span>
+          <span class="input-subhint">?�일 ??1) ?�는 범위(1-14) ?�력</span>
         </div>
       </div>
 
-      <!-- 소그룹 & 대표 묵상 추천 칩스 -->
+      <!-- ?�그�?& ?�??묵상 추천 칩스 -->
       <div class="quick-preset-container">
         <span class="quick-label">추천 묵상 구절:</span>
         <div class="preset-chips">
-          <button type="button" class="chip" data-book="창세기" data-chapter="1" data-verse="1">창세기 1:1</button>
-          <button type="button" class="chip" data-book="시편" data-chapter="23" data-verse="1-6">시편 23편</button>
-          <button type="button" class="chip" data-book="이사야" data-chapter="53" data-verse="5">이사야 53:5</button>
-          <button type="button" class="chip" data-book="요한복음" data-chapter="3" data-verse="16">요한복음 3:16</button>
-          <button type="button" class="chip" data-book="로마서" data-chapter="8" data-verse="28-30">로마서 8:28</button>
-          <button type="button" class="chip" data-book="에베소서" data-chapter="2" data-verse="8-10">에베소서 2:8-10</button>
+          <button type="button" class="chip" data-book="창세�? data-chapter="1" data-verse="1">창세�?1:1</button>
+          <button type="button" class="chip" data-book="?�편" data-chapter="23" data-verse="1-6">?�편 23??/button>
+          <button type="button" class="chip" data-book="?�사?? data-chapter="53" data-verse="5">?�사??53:5</button>
+          <button type="button" class="chip" data-book="?�한복음" data-chapter="3" data-verse="16">?�한복음 3:16</button>
+          <button type="button" class="chip" data-book="로마?? data-chapter="8" data-verse="28-30">로마??8:28</button>
+          <button type="button" class="chip" data-book="?�베?�서" data-chapter="2" data-verse="8-10">?�베?�서 2:8-10</button>
         </div>
       </div>
 
-      <!-- 난이도 선택 영역 (3-Layer) -->
+      <!-- ?�이???�택 ?�역 (3-Layer) -->
       <div class="difficulty-section">
         <div class="panel-section-title">
           <span class="badge-number">2</span>
-          <h2>주석 난이도 선택 (3-Layer)</h2>
+          <h2>주석 ?�이???�택 (3-Layer)</h2>
         </div>
-        <p class="difficulty-guide-text">대상 청중과 소그룹 모임의 성격에 최적화된 개혁주의 주석 층위를 선택하세요.</p>
+        <p class="difficulty-guide-text">?�??�?���??�그�?모임???�격??최적?�된 개혁주의 주석 층위�??�택?�세??</p>
 
         <div class="difficulty-cards-grid">
-          <!-- 레벨 1: 어린이/입문자 -->
+          <!-- ?�벨 1: ?�린???�문??-->
           <label class="difficulty-card" for="diff-level-1">
             <input type="radio" name="difficulty" id="diff-level-1" value="beginner">
             <div class="diff-card-inner">
-              <div class="diff-icon-wrap">🌱</div>
+              <div class="diff-icon-wrap">?��</div>
               <div class="diff-header">
-                <span class="diff-title">어린이 / 입문자</span>
+                <span class="diff-title">?�린??/ ?�문??/span>
                 <span class="diff-sub">Beginner</span>
               </div>
-              <p class="diff-desc">친근한 비유와 쉬운 표현으로 복음의 기초와 하나님의 은혜를 쉽고 명확하게 이해합니다.</p>
-              <div class="diff-badge">가정예배 • 새신자</div>
+              <p class="diff-desc">친근??비유?� ?�운 ?�현?�로 복음??기초?� ?�나?�의 ?�?��? ?�고 명확?�게 ?�해?�니??</p>
+              <div class="diff-badge">가?�예�????�신??/div>
             </div>
           </label>
 
-          <!-- 레벨 2: 성도/청년 (기본 선택) -->
+          <!-- ?�벨 2: ?�도/�?�� (기본 ?�택) -->
           <label class="difficulty-card active" for="diff-level-2">
             <input type="radio" name="difficulty" id="diff-level-2" value="believer" checked>
             <div class="diff-card-inner">
-              <div class="diff-icon-wrap">📖</div>
+              <div class="diff-icon-wrap">?��</div>
               <div class="diff-header">
-                <span class="diff-title">성도 / 청년</span>
+                <span class="diff-title">?�도 / �?��</span>
                 <span class="diff-sub">Standard</span>
               </div>
-              <p class="diff-desc">구속사적 문맥과 역사적 배경, 신학적 균형을 갖춘 실천적 삶의 적용과 묵상을 나눕니다.</p>
-              <div class="diff-badge highlight">소그룹 나눔 • QT</div>
+              <p class="diff-desc">구속?�적 문맥�???��??배경, ?�학??균형??갖춘 ?�천???�의 ?�용�?묵상???�눕?�다.</p>
+              <div class="diff-badge highlight">?�그�??�눔 ??QT</div>
             </div>
           </label>
 
-          <!-- 레벨 3: 심화/연구 -->
+          <!-- ?�벨 3: ?�화/?�구 -->
           <label class="difficulty-card" for="diff-level-3">
             <input type="radio" name="difficulty" id="diff-level-3" value="scholar">
             <div class="diff-card-inner">
-              <div class="diff-icon-wrap">🏛️</div>
+              <div class="diff-icon-wrap">?���?/div>
               <div class="diff-header">
-                <span class="diff-title">심화 / 연구</span>
+                <span class="diff-title">?�화 / ?�구</span>
                 <span class="diff-sub">In-Depth</span>
               </div>
-              <p class="diff-desc">원어(히브리어/헬라어) 뉘앙스, 개혁주의 신조(웨스트민스터 등), 정통 교리와 본문 주해를 다룹니다.</p>
-              <div class="diff-badge">설교 준비 • 신학 탐구</div>
+              <p class="diff-desc">?�어(?�브리어/?�라?? ?�앙?? 개혁주의 ?�조(?�스?��??�터 ??, ?�통 교리?� 본문 주해�??�룹?�다.</p>
+              <div class="diff-badge">?�교 준�????�학 ?�구</div>
             </div>
           </label>
         </div>
       </div>
 
-      <!-- 액션 버튼 -->
+      <!-- ?�션 버튼 -->
       <div class="action-submit-area">
         <button id="btnGenerateCommentary" class="btn btn-primary btn-cta">
           <span class="btn-spinner hidden" id="submitSpinner"></span>
-          <span class="btn-icon">📜</span>
-          <span class="btn-text">정통 개혁주의 주석 생성</span>
+          <span class="btn-icon">?��</span>
+          <span class="btn-text">?�통 개혁주의 주석 ?�성</span>
         </button>
       </div>
     </section>
 
-    <!-- 로딩 스켈레톤 및 인용구 묵상 카드 -->
+    <!-- 로딩 ?�켈?�톤 �??�용�?묵상 카드 -->
     <section id="loadingSection" class="loading-state card hidden">
       <div class="spinner-container">
         <div class="reformed-loader"></div>
-        <h3 class="loading-title">정통 개혁주의 주석을 정성스럽게 작성하고 있습니다...</h3>
-        <p class="loading-subtitle">Gemini 1.5 Flash가 무오한 성경 말씀과 역사적 개혁신학에 근거하여 해설 중입니다.</p>
+        <h3 class="loading-title">?�통 개혁주의 주석???�성?�럽�??�성?�고 ?�습?�다...</h3>
+        <p class="loading-subtitle">Gemini 1.5 Flash가 무오???�경 말�?�???��??개혁?�학??근거?�여 ?�설 중입?�다.</p>
       </div>
       <div class="theologian-quote-box">
-        <span class="quote-symbol">“</span>
-        <p id="theologianQuoteText" class="theologian-quote">성경은 하나님께서 우리를 가르치시는 거룩한 학교이다.</p>
-        <span id="theologianQuoteAuthor" class="theologian-author">— 장 칼뱅 (John Calvin)</span>
+        <span class="quote-symbol">??/span>
+        <p id="theologianQuoteText" class="theologian-quote">?�경?� ?�나?�께???�리�?가르치?�는 거룩???�교?�다.</p>
+        <span id="theologianQuoteAuthor" class="theologian-author">????칼뱅 (John Calvin)</span>
       </div>
     </section>
 
-    <!-- 에러 알림 박스 -->
+    <!-- ?�러 ?�림 박스 -->
     <div id="errorNotification" class="error-notification card hidden">
-      <div class="error-icon">⚠️</div>
+      <div class="error-icon">?�️</div>
       <div class="error-content">
-        <h4 id="errorTitle">오류가 발생했습니다</h4>
-        <p id="errorMessage">API 키 또는 네트워크 상태를 확인해주세요.</p>
+        <h4 id="errorTitle">?�류가 발생?�습?�다</h4>
+        <p id="errorMessage">API ???�는 ?�트?�크 ?�태�??�인?�주?�요.</p>
       </div>
-      <button id="btnCloseError" class="btn-icon-dismiss">✕</button>
+      <button id="btnCloseError" class="btn-icon-dismiss">??/button>
     </div>
 
-    <!-- 주석 결과 카드뉴스 뷰 -->
+    <!-- 주석 결과 카드?�스 �?-->
     <section id="resultSection" class="result-section hidden">
 
-      <!-- 상단 컨트롤 툴바 -->
+      <!-- ?�단 컨트�??�바 -->
       <div class="result-header-bar card">
         <div class="result-info">
-          <span class="scripture-badge" id="resScriptureBadge">창세기 1장 1절</span>
-          <span class="difficulty-pill" id="resDifficultyBadge">성도 / 청년</span>
+          <span class="scripture-badge" id="resScriptureBadge">창세�?1??1??/span>
+          <span class="difficulty-pill" id="resDifficultyBadge">?�도 / �?��</span>
           <span class="time-stamp" id="resTimestamp">2026.09.21</span>
         </div>
         <div class="result-actions">
-          <!-- 글자 크기 조절기 -->
-          <div class="font-size-adjuster" title="글자 크기 조절">
-            <button id="btnFontDec" class="font-btn" title="글자 작게">A-</button>
-            <button id="btnFontReset" class="font-btn reset" title="기본 크기">기본</button>
-            <button id="btnFontInc" class="font-btn" title="글자 크게">A+</button>
+          <!-- 글???�기 조절�?-->
+          <div class="font-size-adjuster" title="글???�기 조절">
+            <button id="btnFontDec" class="font-btn" title="글???�게">A-</button>
+            <button id="btnFontReset" class="font-btn reset" title="기본 ?�기">기본</button>
+            <button id="btnFontInc" class="font-btn" title="글???�게">A+</button>
           </div>
-          <button id="btnCopyAll" class="btn btn-outline" title="전체 주석 텍스트 복사">
-            <span>📋</span> 전체 복사
+          <button id="btnCopyAll" class="btn btn-outline" title="?�체 주석 ?�스??복사">
+            <span>?��</span> ?�체 복사
           </button>
-          <button id="btnPrintCommentary" class="btn btn-outline" title="인쇄 및 PDF 저장">
-            <span>🖨️</span> 인쇄/저장
+          <button id="btnPrintCommentary" class="btn btn-outline" title="?�쇄 �?PDF ?�??>
+            <span>?���?/span> ?�쇄/?�??
           </button>
         </div>
       </div>
 
-      <!-- 4대 섹션 카드뉴스 그리드 -->
+      <!-- 4?� ?�션 카드?�스 그리??-->
       <div class="card-news-container" id="cardNewsContainer">
 
-        <!-- 카드 1: 핵심 요약 -->
+        <!-- 카드 1: ?�심 ?�약 -->
         <article class="news-card card-summary" id="cardSummary">
           <div class="card-header">
             <div class="card-title-group">
-              <span class="card-emoji">📌</span>
-              <h3 class="card-title">핵심 요약</h3>
+              <span class="card-emoji">?��</span>
+              <h3 class="card-title">?�심 ?�약</h3>
             </div>
-            <button class="btn-copy-card" data-target="contentSummary" title="이 섹션 복사">복사</button>
+            <button class="btn-copy-card" data-target="contentSummary" title="???�션 복사">복사</button>
           </div>
           <div class="card-body markdown-body" id="contentSummary">
-            <!-- 동적 주입 -->
+            <!-- ?�적 주입 -->
           </div>
         </article>
 
-        <!-- 카드 2: 역사적·신학적 배경 -->
+        <!-- 카드 2: ??��?�·신?�적 배경 -->
         <article class="news-card card-history" id="cardHistory">
           <div class="card-header">
             <div class="card-title-group">
-              <span class="card-emoji">🏛️</span>
-              <h3 class="card-title">역사적 · 신학적 배경</h3>
+              <span class="card-emoji">?���?/span>
+              <h3 class="card-title">??��??· ?�학??배경</h3>
             </div>
-            <button class="btn-copy-card" data-target="contentHistory" title="이 섹션 복사">복사</button>
+            <button class="btn-copy-card" data-target="contentHistory" title="???�션 복사">복사</button>
           </div>
           <div class="card-body markdown-body" id="contentHistory">
-            <!-- 동적 주입 -->
+            <!-- ?�적 주입 -->
           </div>
         </article>
 
-        <!-- 카드 3: 쉬운 본문 해설 -->
+        <!-- 카드 3: ?�운 본문 ?�설 -->
         <article class="news-card card-exegesis" id="cardExegesis">
           <div class="card-header">
             <div class="card-title-group">
-              <span class="card-emoji">💡</span>
-              <h3 class="card-title">쉬운 본문 해설</h3>
+              <span class="card-emoji">?��</span>
+              <h3 class="card-title">?�운 본문 ?�설</h3>
             </div>
-            <button class="btn-copy-card" data-target="contentExegesis" title="이 섹션 복사">복사</button>
+            <button class="btn-copy-card" data-target="contentExegesis" title="???�션 복사">복사</button>
           </div>
           <div class="card-body markdown-body" id="contentExegesis">
-            <!-- 동적 주입 -->
+            <!-- ?�적 주입 -->
           </div>
         </article>
 
-        <!-- 카드 4: 오늘의 삶 적용 & 기도 제목 -->
+        <!-- 카드 4: ?�늘?????�용 & 기도 ?�목 -->
         <article class="news-card card-application" id="cardApplication">
           <div class="card-header">
             <div class="card-title-group">
-              <span class="card-emoji">🚶‍♂️</span>
-              <h3 class="card-title">오늘의 삶 적용 & 기도 제목</h3>
+              <span class="card-emoji">?��?�♂�?/span>
+              <h3 class="card-title">?�늘?????�용 & 기도 ?�목</h3>
             </div>
-            <button class="btn-copy-card" data-target="contentApplication" title="이 섹션 복사">복사</button>
+            <button class="btn-copy-card" data-target="contentApplication" title="???�션 복사">복사</button>
           </div>
           <div class="card-body markdown-body" id="contentApplication">
-            <!-- 동적 주입 -->
+            <!-- ?�적 주입 -->
           </div>
         </article>
       </div>
 
-      <!-- 소그룹 나눔 팁 푸터 -->
+      <!-- ?�그�??�눔 ???�터 -->
       <div class="group-guide-banner card">
-        <span class="guide-icon">🕊️</span>
+        <span class="guide-icon">?���?/span>
         <div class="guide-text">
-          <strong>소그룹 나눔 팁:</strong>
-          본 주석의 [오늘의 삶 적용]과 [기도 제목]을 공동체 구성원들과 서로 낭독한 뒤,
-          각자의 일상에서 마주한 은혜와 결단을 1가지씩 나누어 보세요.
+          <strong>?�그�??�눔 ??</strong>
+          �?주석??[?�늘?????�용]�?[기도 ?�목]??공동�?구성?�들�??�로 ??��????
+          각자???�상?�서 마주???�?��? 결단??1가지???�누??보세??
         </div>
       </div>
     </section>
   </main>
 
-  <!-- 토스트 알림 메시지 -->
-  <div id="toastMessage" class="toast-popup hidden" role="alert">클립보드에 복사되었습니다.</div>
+  <!-- ?�스???�림 메시지 -->
+  <div id="toastMessage" class="toast-popup hidden" role="alert">?�립보드??복사?�었?�니??</div>
 
-  <!-- 푸터 -->
+  <!-- ?�터 -->
   <footer class="app-footer">
     <div class="footer-container">
-      <p class="footer-motto">Soli Deo Gloria — 오직 하나님께 영광을</p>
-      <p class="footer-sub">정통 개혁주의 신앙고백(웨스트민스터, 하이델베르크)과 성경의 완전 영감 교리에 기초합니다.</p>
+      <p class="footer-motto">Soli Deo Gloria ???�직 ?�나?�께 ?�광??/p>
+      <p class="footer-sub">?�통 개혁주의 ?�앙고백(?�스?��??�터, ?�이?�베르크)�??�경???�전 ?�감 교리??기초?�니??</p>
     </div>
   </footer>
 
