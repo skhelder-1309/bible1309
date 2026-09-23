@@ -1,12 +1,9 @@
-// Sola Gratia 메인 진입점
-document.addEventListener('DOMContentLoaded', () => {
-  const app = document.getElementById('app');
-  if (app) {
+const app = document.getElementById('app');
+if (app) {
     app.innerHTML = `
-      <div style="text-align: center; margin-top: 50px;">
-        <h1 style="font-family: 'Cinzel', serif; color: #d4af37; margin-bottom: 20px;">Sola Gratia</h1>
-        <p style="font-size: 1.2rem;">개혁주의 성경 주석 및 3-Layer 분석 시스템이 정상적으로 로드되었습니다.</p>
-      </div>
+        <div style="text-align: center; margin-top: 50px;">
+            <h1 style="font-family: 'Cinzel', serif; color: #d4af37; margin-bottom: 20px;">Sola Gratia</h1>
+            <p style="font-size: 1.2rem;">개혁주의 성경 주석 및 3-Layer 분석 시스템이 정상적으로 로드되었습니다.</p>
+        </div>
     `;
-  }
-});
+}
